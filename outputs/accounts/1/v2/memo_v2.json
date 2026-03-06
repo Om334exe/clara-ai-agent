@@ -3,7 +3,7 @@
     "company_name": "Bob from Bob's Plumbing",
     "business_hours": "8 AM to 5 PM Eastern Time Eastern",
     "timezone": "Eastern",
-    "office_address": "8 AM to 5 PM Eastern Time.",
+    "office_address": "UNKNOWN",
     "phone_numbers_mentioned": [],
     "services_supported": [
         "Plumbing",
@@ -23,6 +23,6 @@
     "office_hours_flow_summary": "Greet > Ask purpose > Collect name/number > Transfer/Route > Fallback if fails > Confirm next steps > Anything else? > Close",
     "questions_or_unknowns": [],
     "data_source": "onboarding_call",
-    "extracted_at": "2026-03-06T13:46:50.780090",
+    "extracted_at": "2026-03-06T13:49:58.938558",
     "notes": "v2 \u2013 Confirmed onboarding. 3 field(s) updated. 0 unknown(s) remain."
 }

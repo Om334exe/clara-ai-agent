@@ -69,10 +69,14 @@ def extract_timezone(text):
 
 def extract_address(text):
     patterns = [
-        r"\d{1,5}\s+[A-Za-z0-9\s]+(?:Street|St|Avenue|Ave|Boulevard|Blvd|Road|Rd|Drive|Dr|Lane|Ln|Way|Court|Ct|Place|Pl)[^\n,]*",
-        r"(?:located at|address is|office at)\s+([^\n.]{10,80})",
+        r"\d{1,5}\s+[A-Za-z0-9\s]+(?:Street|St\.?|Avenue|Ave\.?|Boulevard|Blvd\.?|Road|Rd\.?|Drive|Dr\.?|Lane|Ln\.?|Way|Court|Ct\.?|Place|Pl\.?)[^\n,]{0,60}",
+        r"(?:located at|address is|office at|based at|our address)\s+([^\n.]{10,80})",
     ]
-    return first_match(patterns, text)
+    result = first_match(patterns, text)
+    # Reject false positives: if result looks like a time (contains AM/PM or digits with colon), discard
+    if result and re.search(r"\b(?:\d{1,2}:\d{2}|am|pm)\b", result, re.I):
+        return None
+    return result
 
 def extract_services(text):
     service_kws = [

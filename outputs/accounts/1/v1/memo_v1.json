@@ -3,7 +3,7 @@
     "company_name": "Bob from Bob's Plumbing",
     "business_hours": "8 AM to 5 PM Eastern Time Eastern",
     "timezone": "Eastern",
-    "office_address": "8 AM to 5 PM Eastern Time.",
+    "office_address": "UNKNOWN",
     "phone_numbers_mentioned": [],
     "services_supported": [
         "Plumbing",
@@ -23,6 +23,6 @@
         "emergency_routing_rules: No routing number provided \u2013 confirm during onboarding"
     ],
     "data_source": "demo_call",
-    "extracted_at": "2026-03-06T13:46:50.777782",
+    "extracted_at": "2026-03-06T13:49:58.936523",
     "notes": "v1 \u2013 Preliminary. Generated from demo call transcript. 1 unknown(s) flagged."
 }

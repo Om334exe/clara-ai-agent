@@ -1,18 +1,31 @@
-# Clara Answers – Zero-Cost Automation Pipeline
+# Clara Answers — Zero-Cost Automation Pipeline
 
-> AI-powered voice agent onboarding automation for service trade businesses.
-> Built for the Clara Answers Intern Assignment.
+> AI voice agent onboarding automation for service trade businesses.  
+> Demo Call → Account Memo → Retell Agent v1 → Onboarding → Agent v2  
+> **100% zero-cost. Local-first. GitHub-native.**
 
 ---
 
-## What This Does
+## Quick Start
 
-This pipeline converts messy, real-world demo and onboarding call transcripts into production-ready **Retell AI Voice Agent** configurations — automatically, at zero cost.
+```bash
+# 1. Clone the repo
+git clone https://github.com/Om334exe/clara-ai-agent.git
+cd clara-ai-agent
 
-```
-Demo Call Transcript   →  Account Memo v1  →  Retell Agent Spec v1 (Draft)
-Onboarding Transcript  →  Account Memo v2  →  Retell Agent Spec v2 (Production)
-                                              + changes.md (Changelog)
+# 2. Add your transcripts (or use the included synthetic ones)
+#    data/demo/account_<id>_demo.txt
+#    data/onboarding/account_<id>_onboarding.txt
+
+# 3. Run the full pipeline
+python3 run_pipeline.py
+
+# 4. View outputs
+ls outputs/accounts/
+
+# 5. Launch the dashboard
+python3 -m http.server 8080
+# Open: http://localhost:8080/dashboard.html
 ```
 
 ---
@@ -20,122 +33,122 @@ Onboarding Transcript  →  Account Memo v2  →  Retell Agent Spec v2 (Producti
 ## Architecture & Data Flow
 
 ```
-data/
-  demo/          ← Drop .txt transcripts (or audio files) here
-  onboarding/    ← Drop .txt transcripts here
+Audio/Video File (.mp4, .m4a)
+        │
+        ▼ [scripts/transcribe_audio.py] — local Whisper, zero-cost
+  Transcript (.txt)
+        │
+        ▼ [scripts/extract_memo_v1.py] — NLP heuristic extraction
+  Account Memo v1 (memo_v1.json)  ◄── DEMO CALL DATA ONLY
+        │
+        ▼ [scripts/generate_agent.py v1]
+  Retell Agent Spec v1 (agent_v1.json)  ← DRAFT / Preliminary
+        │
+        │  ← Onboarding Call Transcript OR Form (JSON)
+        ▼ [scripts/update_memo_v2.py] or [scripts/process_onboarding_form.py]
+  Account Memo v2 (memo_v2.json) + changes.json + changes.md
+        │
+        ▼ [scripts/generate_agent.py v2]
+  Retell Agent Spec v2 (agent_v2.json)  ← PRODUCTION READY
 
-scripts/
-  extract_memo_v1.py      ← Demo transcript → memo_v1.json
-  generate_agent_v1.py    ← memo_v1.json → agent_v1.json (Retell Draft)
-  update_memo_v2.py       ← Onboarding transcript + memo_v1 → memo_v2 + changes.md
-  generate_agent_v2.py    ← memo_v2.json → agent_v2.json (Retell Production)
-  process_all.sh          ← Orchestrator: runs all accounts end-to-end
-  generate_synthetic_data.py ← Generates sample transcripts for testing
-
-workflows/
-  clara_pipeline.json     ← n8n workflow export (importable)
-
-outputs/
-  accounts/
-    <account_id>/
-      v1/ memo_v1.json, agent_v1.json
-      v2/ memo_v2.json, agent_v2.json, changes.md
-
-task_tracker.log          ← Audit log for all pipeline runs
+All accounts tracked in:
+  outputs/batch_summary.json   ← Batch status per account
+  outputs/pipeline.log         ← Full run log
+  outputs/task_tracker.log     ← Mock task tracker entries
 ```
 
 ---
 
-## Quick Start
+## File Structure
 
-### Prerequisites
-- Python 3.8+
-- bash
-
-### 1. Install Dependencies
-```bash
-pip install openai-whisper  # Only needed if transcribing audio
 ```
-
-### 2. Add Your Input Files
-
-**If you have transcripts (`.txt`):**  
-Place demo transcripts as: `data/demo/account_<id>_demo.txt`  
-Place onboarding transcripts as: `data/onboarding/account_<id>_onboarding.txt`
-
-**If you have audio files (`.mp3`, `.m4a`, `.mp4`):**  
-Place audio in `data/demo/` or `data/onboarding/`, then run:
-```bash
-python3 scripts/transcribe_audio.py data/demo/account_1_demo.m4a
+clara-ai-agent/
+├── data/
+│   ├── demo/                          # Demo call transcripts (account_<id>_demo.txt)
+│   ├── onboarding/                    # Onboarding transcripts (account_<id>_onboarding.txt)
+│   ├── real_samples/                  # Downloaded real meeting samples (chat/conf only)
+│   └── example_onboarding_form.json   # Example structured onboarding form
+├── scripts/
+│   ├── extract_memo_v1.py             # Demo transcript → Account Memo v1
+│   ├── generate_agent.py              # Memo → Retell Agent Spec (v1 or v2)
+│   ├── update_memo_v2.py              # Onboarding transcript → Memo v2 + changelog
+│   ├── process_onboarding_form.py     # JSON onboarding form → Memo v2 + conflict log
+│   ├── transcribe_audio.py            # Audio → transcript via local Whisper
+│   ├── generate_synthetic_data.py     # Generate test transcripts
+│   └── process_all.sh                 # Simple bash orchestrator (alternative to Python)
+├── workflows/
+│   └── clara_pipeline.json            # n8n workflow export (importable)
+├── outputs/
+│   ├── accounts/
+│   │   └── <account_id>/
+│   │       ├── v1/
+│   │       │   ├── memo_v1.json       # Extracted account memo (demo)
+│   │       │   └── agent_v1.json      # Retell Agent Spec v1 (draft)
+│   │       └── v2/
+│   │           ├── memo_v2.json       # Updated memo (onboarding)
+│   │           ├── agent_v2.json      # Retell Agent Spec v2 (production)
+│   │           ├── changes.json       # Structured diff (machine-readable)
+│   │           └── changes.md         # Human-readable changelog
+│   ├── batch_summary.json             # Batch run summary with per-account status
+│   └── pipeline.log                   # Full structured run log
+├── run_pipeline.py                    # Master Python batch orchestrator
+├── dashboard.html                     # Web dashboard (diff viewer, prompt viewer)
+├── docker-compose.yml                 # Local n8n setup
+└── README.md
 ```
-
-**To use sample synthetic data:**
-```bash
-python3 scripts/generate_synthetic_data.py
-```
-
-### 3. Run the Full Pipeline
-```bash
-chmod +x scripts/process_all.sh
-./scripts/process_all.sh
-```
-
-The script will automatically detect all accounts in `data/demo/` and process them end-to-end.
-
-### 4. View Outputs
-```
-outputs/accounts/1/v1/memo_v1.json     ← Extracted account memo (demo)
-outputs/accounts/1/v1/agent_v1.json    ← Retell agent spec (draft)
-outputs/accounts/1/v2/memo_v2.json     ← Updated memo (post-onboarding)
-outputs/accounts/1/v2/agent_v2.json    ← Retell agent spec (production)
-outputs/accounts/1/v2/changes.md       ← Changelog (what changed & why)
-```
-
----
-
-## Retell Integration
-
-Since Retell's programmatic agent creation requires a paid plan, use the **manual import method**:
-
-1. Open your [Retell Dashboard](https://retell.ai/)
-2. Click **Create Agent**
-3. Open `outputs/accounts/<id>/v2/agent_v2.json`
-4. Copy the value of `system_prompt` → paste into Retell's System Prompt field
-5. Set the voice to match `voice` field
-6. Save — your agent is production-ready!
-
----
-
-## n8n Setup
-
-1. Install n8n locally: `npx n8n` or via Docker:
-   ```bash
-   docker run -it --rm --name n8n -p 5678:5678 -v ~/.n8n:/home/node/.n8n n8nio/n8n
-   ```
-2. Open `http://localhost:5678`
-3. Import `workflows/clara_pipeline.json`
-4. The workflow calls `process_all.sh` to run the full batch
 
 ---
 
 ## Account Memo Schema
 
+Every `memo_v1.json` and `memo_v2.json` has these exact fields:
+
 ```json
 {
   "account_id": "1",
-  "company_name": "...",
-  "business_hours": "Mon-Fri, 8am-5pm ET",
-  "office_address": "...",
-  "services_supported": ["...", "..."],
-  "emergency_definition": ["...", "..."],
-  "emergency_routing_rules": "...",
-  "non_emergency_routing_rules": "...",
-  "call_transfer_rules": "...",
-  "integration_constraints": ["..."],
+  "company_name": "Bob's Plumbing",
+  "business_hours": "Mon-Fri 8am-5pm Eastern",
+  "timezone": "Eastern",
+  "office_address": "UNKNOWN",
+  "phone_numbers_mentioned": ["555-0199"],
+  "services_supported": ["general plumbing maintenance"],
+  "emergency_definition": ["burst pipes"],
+  "emergency_routing_rules": "555-0199 (Dispatch)",
+  "non_emergency_routing_rules": "Take a message ...",
+  "call_transfer_rules": "Fallback: text them immediately and hang up",
+  "integration_constraints": ["Don't schedule jobs for weekends"],
   "after_hours_flow_summary": "...",
   "office_hours_flow_summary": "...",
-  "questions_or_unknowns": ["..."],
-  "notes": "..."
+  "questions_or_unknowns": [],
+  "data_source": "onboarding_call",
+  "extracted_at": "2026-03-06T...",
+  "notes": "v2 – Confirmed onboarding. 3 field(s) updated."
+}
+```
+
+**Key discipline:** `questions_or_unknowns` is populated ONLY when information is genuinely absent. No hallucination, no silent assumptions.
+
+---
+
+## Retell Agent Spec Schema
+
+Every `agent_v1.json` and `agent_v2.json` includes:
+
+```json
+{
+  "agent_name": "Bob's Plumbing – Clara AI Agent",
+  "version": "v2",
+  "status": "Production – Post Onboarding",
+  "voice": "11labs-charlotte",
+  "language": "en-US",
+  "system_prompt": "... full prompt ...",
+  "key_variables": { "company_name", "business_hours", "timezone", "emergency_routing_number", ... },
+  "call_transfer_protocol": { "method": "warm_transfer", "timeout_seconds": 30, ... },
+  "after_hours_protocol": { "enabled": true, "emergency_keywords": [...], ... },
+  "tool_invocations": { "note": "Internal only. Never reveal to callers.", "placeholders": [...] },
+  "integration_constraints": [...],
+  "questions_or_unknowns": [],
+  "generated_at": "..."
 }
 ```
 
@@ -143,13 +156,149 @@ Since Retell's programmatic agent creation requires a paid plan, use the **manua
 
 ## Agent Prompt Flows
 
-Every generated agent strictly follows:
+Both v1 and v2 prompts strictly implement:
 
-**Business Hours:**  
-Greeting → Ask purpose → Name & Number → Transfer → Fallback if fail → Anything else? → Close
+### Business Hours Flow
+1. **Greeting** — "Thank you for calling {company}, this is Clara."
+2. **Ask purpose** — Listen, do not interrupt
+3. **Collect name + number** — before any transfer
+4. **Route / Transfer** — silently, do not narrate mechanism
+5. **Fallback if fails** — apologize, log info, assure follow-up
+6. **Anything else?** — ask
+7. **Close** — "Have a great day!"
 
-**After Hours:**  
-Greeting → Ask purpose → Confirm emergency → (Emergency) Collect name/number/address → Transfer → Fallback → (Non-Emergency) Collect & confirm follow-up → Anything else? → Close
+### After Hours Flow
+1. **Greeting** — announce closed, give hours
+2. **Ask purpose** — "Are you experiencing an emergency?"
+3. **If Emergency** → collect name, number, address → attempt transfer → fallback
+4. **If Non-Emergency** → collect details → confirm next-business-day follow-up
+5. **Anything else?** → Close
+
+**Prompt hygiene rules enforced in every generated spec:**
+- ❌ Never mention "function calls", "tools", or "APIs"
+- ❌ Never ask for more info than needed for routing/dispatch
+- ❌ Never hallucinate business rules not in the memo
+- ✅ Always have a fallback for failed transfers
+
+---
+
+## Audio Transcription (Zero-Cost)
+
+If you receive `.mp4` or `.m4a` files instead of transcripts:
+
+```bash
+# Install (one-time)
+pip install openai-whisper
+
+# Transcribe
+python3 scripts/transcribe_audio.py data/demo/account_1_demo.m4a
+# → Creates: data/demo/account_1_demo_transcript.txt
+
+# Then run pipeline
+python3 run_pipeline.py
+```
+
+Models available: `tiny`, `base` (default), `small`, `medium` — all free, all local.
+
+---
+
+## Onboarding Form (Structured Input)
+
+Instead of a call transcript, clients can submit a JSON form:
+
+```bash
+# Generate a filled example
+python3 scripts/process_onboarding_form.py --generate-example
+# → data/example_onboarding_form.json
+
+# Process a form
+python3 scripts/process_onboarding_form.py 1 data/example_onboarding_form.json
+```
+
+The form handler detects **conflicts** (where the form overrides demo data) and logs them explicitly in `changes.md`.
+
+---
+
+## n8n Setup
+
+```bash
+# Start n8n locally (Docker required)
+docker-compose up -d
+
+# Open: http://localhost:5678
+# Import: workflows/clara_pipeline.json
+```
+
+**Environment variables for n8n:**
+```
+CLARA_ROOT=/path/to/clara-ai-agent
+CLARA_DEMO_DIR=data/demo
+CLARA_ONBOARDING_DIR=data/onboarding
+```
+
+The workflow includes both a **Manual Trigger** and an optional **24h Scheduled Trigger**.
+
+---
+
+## Retell Integration
+
+Retell's programmatic API requires a paid plan. Manual import:
+
+1. Open [retell.ai](https://retell.ai) → Create Agent
+2. Open `outputs/accounts/<id>/v2/agent_v2.json`
+3. Copy `system_prompt` → paste into Retell System Prompt field
+4. Set voice to match `voice` field (`11labs-charlotte`)
+5. Agent is ready ✅
+
+---
+
+## Web Dashboard (Bonus)
+
+```bash
+python3 -m http.server 8080
+# Open: http://localhost:8080/dashboard.html
+```
+
+**Dashboard features:**
+- 📊 Batch stats (total, v2-ready, unknowns)
+- 🃏 Account cards with details
+- 🔍 **Diff viewer** — side-by-side v1 vs v2 for every field
+- 📝 Agent prompt viewer for v1 and v2
+- 🔄 Live reads from `outputs/` JSON files
+
+---
+
+## Running the Pipeline
+
+```bash
+# Default (idempotent — skips already-processed accounts)
+python3 run_pipeline.py
+
+# Force reprocess all accounts
+python3 run_pipeline.py --force
+
+# Custom directories
+python3 run_pipeline.py --demo-dir /path/to/demos --onboarding-dir /path/to/onboarding
+
+# Simple bash alternative (no Python import required)
+./scripts/process_all.sh
+```
+
+---
+
+## Zero-Cost Stack
+
+| Component | Tool | Cost |
+|---|---|---|
+| Transcription | OpenAI Whisper (local CPU) | $0 |
+| Extraction | Python heuristic NLP | $0 |
+| Agent templating | Python f-strings | $0 |
+| Orchestration | Python + bash + n8n (local Docker) | $0 |
+| Storage | Local JSON files + GitHub repo | $0 |
+| Task tracking | Local log file (mock) | $0 |
+| Dashboard | Static HTML served by http.server | $0 |
+| Repository | GitHub (public) | $0 |
+| **Total** | | **$0** |
 
 ---
 
@@ -157,55 +306,20 @@ Greeting → Ask purpose → Confirm emergency → (Emergency) Collect name/numb
 
 | Limitation | Notes |
 |---|---|
-| Transcript quality | Extraction is heuristic-based. High-quality transcripts improve accuracy. |
-| Audio transcription | Whisper `base` model is used for free local STT. Slower on CPU. |
+| Transcript quality | Heuristic extraction works best on structured dialogues. Quality degrades with heavy crosstalk or very informal speech. |
+| Whisper on CPU | ~3–10 min per 30min audio file. GPU dramatically faster. |
 | Retell API | Free tier does not support programmatic agent creation. Manual import required. |
-| Fireflies.ai | Transcripts cannot be scraped automatically (JS-gated). Manual export needed. |
+| Fireflies.ai | Requires browser auth; transcripts cannot be scraped automatically. Export manually. |
+| Company name extraction | Can misfire on very unstructured intros — add company name manually to form if needed. |
 
 ---
 
 ## What I'd Improve with Production Access
 
-1. **Use Retell's API** to auto-deploy agent specs directly
-2. **Use Fireflies or AssemblyAI API** for faster, higher-quality transcription
-3. **Add an LLM extraction pass** (e.g., GPT-4o with structured output) for better NLP
-4. **Supabase storage** for multi-user, multi-tenant account management
-5. **Webhook triggers** so onboarding form submissions auto-trigger v2 generation
-
----
-
-## Zero-Cost Stack Summary
-
-| Component | Tool | Cost |
-|---|---|---|
-| Transcription | OpenAI Whisper (local) | $0 |
-| Extraction | Python regex + heuristics | $0 |
-| Agent templating | Python f-strings | $0 |
-| Orchestration | bash + n8n (local Docker) | $0 |
-| Storage | Local JSON files | $0 |
-| Task tracking | Local log file | $0 |
-| Repository | GitHub (public) | $0 |
-
----
-
-## Repository Structure
-
-```
-.
-├── data/
-│   ├── demo/            ← Demo call transcripts
-│   └── onboarding/      ← Onboarding call transcripts
-├── scripts/
-│   ├── extract_memo_v1.py
-│   ├── generate_agent_v1.py
-│   ├── update_memo_v2.py
-│   ├── generate_agent_v2.py
-│   ├── process_all.sh
-│   └── generate_synthetic_data.py
-├── workflows/
-│   └── clara_pipeline.json
-├── outputs/
-│   └── accounts/<id>/v1 and v2
-├── .gitignore
-└── README.md
-```
+1. **Retell API integration** — auto-deploy agent spec directly on save
+2. **AssemblyAI or Deepgram** free tier — better speaker diarization for messy calls
+3. **GPT-4o with structured output** — LLM extraction for unstructured edge cases
+4. **Supabase** — multi-user, multi-tenant account management with row-level security
+5. **Webhook triggers** — form submission or CRM event auto-triggers pipeline v2
+6. **Asana/Linear integration** — real task tracking per account
+7. **Slack alerts** — notify team when a new account completes onboarding or has unresolved unknowns
