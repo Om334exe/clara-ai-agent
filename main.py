@@ -9,6 +9,9 @@ Usage: python3 main.py [run|transcribe|status] --help
 
 Author: Clara AI Pipeline Team
 """
+import argparse
+import sys
+import os
 from run_pipeline import run_pipeline
 from scripts.transcribe_audio import transcribe
 from scripts import task_tracker
