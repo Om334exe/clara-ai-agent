@@ -22,7 +22,7 @@
         "method": "warm_transfer",
         "timeout_seconds": 30,
         "emergency_number": "555-0200",
-        "fallback_message": "Fallback: Client: Apologize and say dispatch will call back in 5 mins"
+        "fallback_protocol": "Fallback: Client: Apologize and say dispatch will call back in 5 mins"
     },
     "after_hours_protocol": {
         "enabled": true,
@@ -52,5 +52,5 @@
     "questions_or_unknowns": [
         "emergency_definition: Emergency types not defined \u2013 confirm during onboarding"
     ],
-    "generated_at": "2026-03-06T14:12:04.254075"
+    "generated_at": "2026-03-06T14:41:23.212318"
 }

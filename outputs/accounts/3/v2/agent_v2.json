@@ -19,7 +19,7 @@
         "method": "warm_transfer",
         "timeout_seconds": 30,
         "emergency_number": "555-0300",
-        "fallback_message": "Fallback: cing high volume and collect details"
+        "fallback_protocol": "Fallback: cing high volume and collect details"
     },
     "after_hours_protocol": {
         "enabled": true,
@@ -47,5 +47,5 @@
     "questions_or_unknowns": [
         "emergency_definition: Emergency types not defined \u2013 confirm during onboarding"
     ],
-    "generated_at": "2026-03-06T14:12:04.271550"
+    "generated_at": "2026-03-06T14:41:23.227778"
 }

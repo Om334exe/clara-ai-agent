@@ -19,7 +19,7 @@
         "method": "warm_transfer",
         "timeout_seconds": 30,
         "emergency_number": "555-1000.",
-        "fallback_message": "Default: 30 second timeout \u2013 to be confirmed at onboarding"
+        "fallback_protocol": "Default: 30 second timeout \u2013 to be confirmed at onboarding"
     },
     "after_hours_protocol": {
         "enabled": true,
@@ -47,5 +47,5 @@
     "questions_or_unknowns": [
         "emergency_definition: Emergency types not defined \u2013 confirm during onboarding"
     ],
-    "generated_at": "2026-03-06T14:12:04.305117"
+    "generated_at": "2026-03-06T14:41:23.267873"
 }

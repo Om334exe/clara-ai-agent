@@ -19,7 +19,7 @@
         "method": "warm_transfer",
         "timeout_seconds": 30,
         "emergency_number": "555-9999",
-        "fallback_message": "Fallback: 911 immediately if there is a fire risk, otherwise we will call them back in 15 minutes"
+        "fallback_protocol": "Fallback: 911 immediately if there is a fire risk, otherwise we will call them back in 15 minutes"
     },
     "after_hours_protocol": {
         "enabled": true,
@@ -50,5 +50,5 @@
     "questions_or_unknowns": [
         "emergency_definition: Emergency types not defined \u2013 confirm during onboarding"
     ],
-    "generated_at": "2026-03-06T14:12:04.311265"
+    "generated_at": "2026-03-06T14:41:23.274670"
 }

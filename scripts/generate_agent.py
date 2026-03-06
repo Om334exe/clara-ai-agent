@@ -192,7 +192,7 @@ def generate_agent_spec(account_id: str, version: str):
             "method": "warm_transfer",
             "timeout_seconds": 30,
             "emergency_number": emerg_route,
-            "fallback_message": maybe(memo.get("call_transfer_rules"), "Apologize and assure callback"),
+            "fallback_protocol": maybe(memo.get("call_transfer_rules"), "Apologize and assure callback"),
         },
         "after_hours_protocol": {
             "enabled": True,

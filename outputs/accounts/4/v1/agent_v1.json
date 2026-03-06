@@ -19,7 +19,7 @@
         "method": "warm_transfer",
         "timeout_seconds": 30,
         "emergency_number": "UNKNOWN \u2013 to be confirmed at onboarding",
-        "fallback_message": "Default: 30 second timeout \u2013 to be confirmed at onboarding"
+        "fallback_protocol": "Default: 30 second timeout \u2013 to be confirmed at onboarding"
     },
     "after_hours_protocol": {
         "enabled": true,
@@ -51,5 +51,5 @@
         "emergency_definition: Emergency types not defined \u2013 confirm during onboarding",
         "emergency_routing_rules: No routing number provided \u2013 confirm during onboarding"
     ],
-    "generated_at": "2026-03-06T14:12:04.277833"
+    "generated_at": "2026-03-06T14:41:23.236736"
 }
