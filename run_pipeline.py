@@ -1,10 +1,3 @@
-#!/usr/bin/env python3
-"""
-Clara AI Pipeline - Master Batch Orchestrator
-Runs the full pipeline on all accounts. Idempotent, logged, retry-safe.
-Usage: python run_pipeline.py [demo_dir] [onboarding_dir]
-"""
-
 import os
 import sys
 import json
@@ -14,6 +7,7 @@ from datetime import datetime
 from scripts.extract_memo_v1 import extract_memo_v1
 from scripts.update_memo_v2 import update_memo_v2
 from scripts.generate_agent import generate_agent_spec
+from scripts import task_tracker
 
 logging.basicConfig(
     level=logging.INFO,
@@ -34,6 +28,9 @@ def get_account_id(filename):
 def run_pipeline(demo_dir="data/demo", onboarding_dir="data/onboarding", force=False):
     os.makedirs("outputs/accounts", exist_ok=True)
     os.makedirs("outputs", exist_ok=True)
+    
+    # Initialize Tracker
+    task_tracker.init_db()
 
     summary = {
         "started_at": datetime.now().isoformat(),
@@ -78,44 +75,63 @@ def run_pipeline(demo_dir="data/demo", onboarding_dir="data/onboarding", force=F
         summary["total"] += 1
 
         log.info(f"═══ Account {account_id} ═══")
+        task_tracker.update_account_status(account_id, "PROCESSING_V1")
 
         # ── Pipeline A: Demo → v1 ──────────────────────────────────────────────
         v1_memo_path = f"outputs/accounts/{account_id}/v1/memo_v1.json"
+        v1_agent_path = f"outputs/accounts/{account_id}/v1/agent_v1.json"
+        
         if os.path.exists(v1_memo_path) and not force:
             log.info(f"[{account_id}] v1 already exists (idempotent). Skipping extraction.")
             account_result["v1_status"] = "skipped (already exists)"
         else:
             try:
-                extract_memo_v1(account_id, demo_path)
+                memo = extract_memo_v1(account_id, demo_path)
                 generate_agent_spec(account_id, "v1")
                 account_result["v1_status"] = "success"
                 log.info(f"[{account_id}] ✅ v1 complete")
+                task_tracker.update_account_status(account_id, "V1_COMPLETED", 
+                                                 company_name=memo.get("company_name"),
+                                                 v1_memo_path=v1_memo_path,
+                                                 v1_agent_path=v1_agent_path)
             except Exception as e:
                 account_result["v1_status"] = f"FAILED: {e}"
                 account_result["errors"].append(str(e))
                 log.error(f"[{account_id}] v1 FAILED: {e}")
+                task_tracker.update_account_status(account_id, f"V1_FAILED: {str(e)[:50]}")
                 summary["failed"] += 1
                 summary["accounts"].append(account_result)
                 continue
 
         # ── Pipeline B: Onboarding → v2 ───────────────────────────────────────
         v2_memo_path = f"outputs/accounts/{account_id}/v2/memo_v2.json"
+        v2_agent_path = f"outputs/accounts/{account_id}/v2/agent_v2.json"
+        changelog_path = f"outputs/accounts/{account_id}/v2/changes.json"
+        
         if os.path.exists(v2_memo_path) and not force:
             log.info(f"[{account_id}] v2 already exists (idempotent). Skipping onboarding update.")
             account_result["v2_status"] = "skipped (already exists)"
+            task_tracker.update_account_status(account_id, "V2_COMPLETED")
         elif not os.path.exists(onboarding_path):
             log.warning(f"[{account_id}] No onboarding file found at {onboarding_path} – skipping v2")
             account_result["v2_status"] = "skipped (no onboarding file)"
+            task_tracker.update_account_status(account_id, "AWAITING_ONBOARDING")
         else:
             try:
+                task_tracker.update_account_status(account_id, "PROCESSING_V2")
                 update_memo_v2(account_id, onboarding_path)
                 generate_agent_spec(account_id, "v2")
                 account_result["v2_status"] = "success"
                 log.info(f"[{account_id}] ✅ v2 complete")
+                task_tracker.update_account_status(account_id, "V2_COMPLETED",
+                                                 v2_memo_path=v2_memo_path,
+                                                 v2_agent_path=v2_agent_path,
+                                                 changelog_path=changelog_path)
             except Exception as e:
                 account_result["v2_status"] = f"FAILED: {e}"
                 account_result["errors"].append(str(e))
                 log.error(f"[{account_id}] v2 FAILED: {e}")
+                task_tracker.update_account_status(account_id, f"V2_FAILED: {str(e)[:50]}")
                 summary["failed"] += 1
                 summary["accounts"].append(account_result)
                 continue
@@ -138,6 +154,7 @@ def run_pipeline(demo_dir="data/demo", onboarding_dir="data/onboarding", force=F
     log.info("═" * 60)
     log.info(f"Total: {summary['total']}  ✅ Succeeded: {summary['succeeded']}  ❌ Failed: {summary['failed']}  ⏭ Skipped: {summary['skipped']}")
     log.info("Batch summary written → outputs/batch_summary.json")
+    log.info("Industrial tracking updated → outputs/pipeline_tracker.db")
 
     return summary
 

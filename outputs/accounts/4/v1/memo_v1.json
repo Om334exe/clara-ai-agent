@@ -23,6 +23,6 @@
         "emergency_routing_rules: No routing number provided \u2013 confirm during onboarding"
     ],
     "data_source": "demo_call",
-    "extracted_at": "2026-03-06T13:49:58.946953",
+    "extracted_at": "2026-03-06T14:09:24.128139",
     "notes": "v1 \u2013 Preliminary. Generated from demo call transcript. 3 unknown(s) flagged."
 }
