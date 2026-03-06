@@ -25,7 +25,7 @@ def clean(line: str) -> str:
     """Strip speaker labels like 'Client:', 'Agent:', 'Ben:', etc."""
     return re.sub(r"^[A-Za-z\s]+:\s*", "", line).strip()
 
-def first_match(patterns, text):
+def first_match(patterns, text, group=1):
     """Utility to return the first regex match from a list of candidates."""
     for p in patterns:
         m = re.search(p, text, re.I)
