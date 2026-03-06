@@ -1,0 +1,18 @@
+{
+    "account_id": "3",
+    "company_name": "John here with ACME HVAC. Need something to handle overnight calls.",
+    "business_hours": "We are open 9 AM to 6 PM, Mon-Sat. Central Time.",
+    "office_address": "Unknown",
+    "services_supported": [],
+    "emergency_definition": [
+        "No cooling in summer or no heating in winter."
+    ],
+    "emergency_routing_rules": "Unknown",
+    "non_emergency_routing_rules": "Take a message",
+    "call_transfer_rules": "Default 30s timeout",
+    "integration_constraints": [],
+    "after_hours_flow_summary": "Route emergencies, take message for others",
+    "office_hours_flow_summary": "Handle calls according to routing rules",
+    "questions_or_unknowns": [],
+    "notes": "Generated from Demo call"
+}

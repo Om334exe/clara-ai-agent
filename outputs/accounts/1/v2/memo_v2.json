@@ -1,0 +1,23 @@
+{
+    "account_id": "1",
+    "company_name": "Bob's Plumbing",
+    "business_hours": "They should probably just go straight to my cell phone, I guess.",
+    "office_address": "Unknown",
+    "services_supported": [
+        "Just general plumbing maintenance."
+    ],
+    "emergency_definition": [
+        "Yes, burst pipes are our main emergency.",
+        "Yes, burst pipes are our main emergency."
+    ],
+    "emergency_routing_rules": "They should probably just go straight to my cell phone, I guess.",
+    "non_emergency_routing_rules": "Take a message",
+    "call_transfer_rules": "If transfer fails, tell them we will text them immediately and hang up.",
+    "integration_constraints": [
+        "Don't schedule jobs for weekends."
+    ],
+    "after_hours_flow_summary": "Route emergencies, take message for others",
+    "office_hours_flow_summary": "Handle calls according to routing rules",
+    "questions_or_unknowns": [],
+    "notes": "Updated from Onboarding call"
+}

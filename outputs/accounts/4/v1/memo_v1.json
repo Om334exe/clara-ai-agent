@@ -1,0 +1,20 @@
+{
+    "account_id": "4",
+    "company_name": "Hi, Jim's Electrical here. Need help answering phones.",
+    "business_hours": "8-4 M-F, Mountain Time.",
+    "office_address": "Unknown",
+    "services_supported": [
+        "We don't do residential solar."
+    ],
+    "emergency_definition": [
+        "Sparks, power outages, or downed lines."
+    ],
+    "emergency_routing_rules": "Unknown",
+    "non_emergency_routing_rules": "Take a message",
+    "call_transfer_rules": "Default 30s timeout",
+    "integration_constraints": [],
+    "after_hours_flow_summary": "Route emergencies, take message for others",
+    "office_hours_flow_summary": "Handle calls according to routing rules",
+    "questions_or_unknowns": [],
+    "notes": "Generated from Demo call"
+}

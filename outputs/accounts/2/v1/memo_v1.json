@@ -1,0 +1,20 @@
+{
+    "account_id": "2",
+    "company_name": "Apex Fire Protection",
+    "business_hours": "7am to 4pm, Mon-Fri, Pacific Time.",
+    "office_address": "Unknown",
+    "services_supported": [],
+    "emergency_definition": [
+        "Active sprinkler leaks or fire alarms going off.",
+        "We want them routed to the on-call tech, but we'll figure out the exact number later.",
+        "Take a message."
+    ],
+    "emergency_routing_rules": "Unknown",
+    "non_emergency_routing_rules": "Take a message.",
+    "call_transfer_rules": "Default 30s timeout",
+    "integration_constraints": [],
+    "after_hours_flow_summary": "Route emergencies, take message for others",
+    "office_hours_flow_summary": "Handle calls according to routing rules",
+    "questions_or_unknowns": [],
+    "notes": "Generated from Demo call"
+}
