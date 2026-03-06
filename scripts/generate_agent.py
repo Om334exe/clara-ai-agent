@@ -1,7 +1,12 @@
 #!/usr/bin/env python3
 """
-Clara AI Pipeline - Agent Spec Generator (v1 & v2)
-Generates a complete, prompt-hygienic Retell Agent JSON spec from a memo.
+Clara AI - Agent Configuration Engine
+-------------------------------------
+Transforms structured account memos into high-fidelity Retell Agent
+specifications. Enforces strict prompt hygiene and identifies operational
+flows for both business hours and after-hours scenarios.
+
+Author: Clara AI Pipeline Team
 """
 
 import os
@@ -10,8 +15,9 @@ import json
 import logging
 from datetime import datetime
 
+# Production-grade logging
 logging.basicConfig(level=logging.INFO, format="[%(levelname)s] %(message)s")
-log = logging.getLogger("clara.agent_gen")
+log = logging.getLogger("clara.agent")
 
 VOICE_OPTIONS = {
     "default": "11labs-charlotte",

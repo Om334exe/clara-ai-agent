@@ -1,13 +1,18 @@
 #!/usr/bin/env python3
 """
-Clara AI Pipeline - Audio Transcriber
-Uses local OpenAI Whisper (zero-cost) to transcribe .mp4 / .m4a / .mp3 → .txt
+Clara AI - Local Audio Transcription
+------------------------------------
+Leverages OpenAI's Whisper model to perform zero-cost, private transcription 
+of meeting recordings (.mp4, .m4a, .mp3). 
+
+Author: Clara AI Pipeline Team
 """
 
 import os
 import sys
 import logging
 
+# Production-grade logging
 logging.basicConfig(level=logging.INFO, format="[%(levelname)s] %(message)s")
 log = logging.getLogger("clara.transcribe")
 

@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 """
-Clara AI Pipeline - Unified CLI
-The single entry point for all pipeline operations.
-"""
+Clara AI - Unified Command Line Interface
+-----------------------------------------
+The primary entry point for managing the Clara AI automation pipeline.
+Supports batch processing, local transcription, and real-time status tracking.
 
-import argparse
-import sys
-import os
+Usage: python3 main.py [run|transcribe|status] --help
+
+Author: Clara AI Pipeline Team
+"""
 from run_pipeline import run_pipeline
 from scripts.transcribe_audio import transcribe
 from scripts import task_tracker

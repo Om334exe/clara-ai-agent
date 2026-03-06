@@ -1,3 +1,14 @@
+#!/usr/bin/env python3
+"""
+Clara AI - Batch Pipeline Orchestrator
+--------------------------------------
+The master engine that iterates over customer accounts and coordinates the
+transition from Demo (v1) to Onboarding (v2). It ensures idempotency and
+provides detailed batch reporting.
+
+Author: Clara AI Pipeline Team
+"""
+
 import os
 import sys
 import json
@@ -9,6 +20,7 @@ from scripts.update_memo_v2 import update_memo_v2
 from scripts.generate_agent import generate_agent_spec
 from scripts import task_tracker
 
+# Global pipeline logging configuration
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s [%(levelname)s] %(message)s",

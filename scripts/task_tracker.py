@@ -1,3 +1,14 @@
+#!/usr/bin/env python3
+"""
+Clara AI - Persistence and Tracking System
+------------------------------------------
+Industrial-grade SQLite backend for tracking account progression through 
+the automation pipeline. Maintains the canonical state for all customer 
+configuration artifacts.
+
+Author: Clara AI Pipeline Team
+"""
+
 import sqlite3
 import os
 from datetime import datetime

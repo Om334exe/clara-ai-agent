@@ -66,33 +66,24 @@ clara-ai-agent/
 ├── data/
 │   ├── demo/                          # Demo call transcripts (account_<id>_demo.txt)
 │   ├── onboarding/                    # Onboarding transcripts (account_<id>_onboarding.txt)
-│   ├── real_samples/                  # Downloaded real meeting samples (chat/conf only)
+│   ├── real_samples/                  # Downloaded real meeting samples
 │   └── example_onboarding_form.json   # Example structured onboarding form
 ├── scripts/
 │   ├── extract_memo_v1.py             # Demo transcript → Account Memo v1
-│   ├── generate_agent.py              # Memo → Retell Agent Spec (v1 or v2)
+│   ├── generate_agent.py              # Unified Memo → Retell Agent Spec (v1 or v2)
 │   ├── update_memo_v2.py              # Onboarding transcript → Memo v2 + changelog
 │   ├── process_onboarding_form.py     # JSON onboarding form → Memo v2 + conflict log
 │   ├── transcribe_audio.py            # Audio → transcript via local Whisper
-│   ├── generate_synthetic_data.py     # Generate test transcripts
-│   └── process_all.sh                 # Simple bash orchestrator (alternative to Python)
+│   ├── task_tracker.py                # Industrial SQLite status tracking
+│   └── generate_synthetic_data.py     # Generate test transcripts
 ├── workflows/
 │   └── clara_pipeline.json            # n8n workflow export (importable)
 ├── outputs/
-│   ├── accounts/
-│   │   └── <account_id>/
-│   │       ├── v1/
-│   │       │   ├── memo_v1.json       # Extracted account memo (demo)
-│   │       │   └── agent_v1.json      # Retell Agent Spec v1 (draft)
-│   │       └── v2/
-│   │           ├── memo_v2.json       # Updated memo (onboarding)
-│   │           ├── agent_v2.json      # Retell Agent Spec v2 (production)
-│   │           ├── changes.json       # Structured diff (machine-readable)
-│   │           └── changes.md         # Human-readable changelog
-│   ├── batch_summary.json             # Batch run summary with per-account status
+│   ├── accounts/                      # Per-account versioned configurations
+│   ├── pipeline_tracker.db            # SQLite persistence layer
 │   └── pipeline.log                   # Full structured run log
-├── run_pipeline.py                    # Master Python batch orchestrator
-├── dashboard.html                     # Web dashboard (diff viewer, prompt viewer)
+├── main.py                            # Unified CLI Entry Point (Status, Run, Transcribe)
+├── dashboard.html                     # Web dashboard (Side-by-side Diff Viewer)
 ├── docker-compose.yml                 # Local n8n setup
 └── README.md
 ```

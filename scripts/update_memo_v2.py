@@ -1,7 +1,12 @@
 #!/usr/bin/env python3
 """
-Clara AI Pipeline - Robust Update Engine (v1 → v2 via Onboarding)
-Applies onboarding patches to memo_v1.json, generates memo_v2.json + changelog.
+Clara AI - Onboarding Update Engine
+-----------------------------------
+This engine processes refined operational requirements from onboarding calls.
+It computes the delta between preliminary assumptions (v1) and confirmed
+specifications (v2), generating both structured and human-readable changelogs.
+
+Author: Clara AI Pipeline Team
 """
 
 import os
@@ -12,6 +17,7 @@ import logging
 from datetime import datetime
 from copy import deepcopy
 
+# Professional logging configuration
 logging.basicConfig(level=logging.INFO, format="[%(levelname)s] %(message)s")
 log = logging.getLogger("clara.update_v2")
 

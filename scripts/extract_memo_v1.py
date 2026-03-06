@@ -1,8 +1,12 @@
 #!/usr/bin/env python3
 """
-Clara AI Pipeline - Robust Transcript Extractor (v1 - Demo Call)
-Handles real-world messy transcripts with NLP-grade heuristics.
-Flags ALL missing fields as questions_or_unknowns. No hallucination.
+Clara AI - Demo Extraction Engine
+---------------------------------
+This script parses preliminary business data from initial demo call transcripts.
+It focuses on capturing the 'directional' intent of the client while explicitly
+flagging missing operational details for confirmation during onboarding.
+
+Author: Clara AI Pipeline Team
 """
 
 import os
@@ -12,17 +16,19 @@ import re
 import logging
 from datetime import datetime
 
+# Configure clean logging for production visibility
 logging.basicConfig(level=logging.INFO, format="[%(levelname)s] %(message)s")
-log = logging.getLogger("clara.extract_v1")
+log = logging.getLogger("clara.extract")
 
 # ── helpers ──────────────────────────────────────────────────────────────────
 def clean(line: str) -> str:
     """Strip speaker labels like 'Client:', 'Agent:', 'Ben:', etc."""
     return re.sub(r"^[A-Za-z\s]+:\s*", "", line).strip()
 
-def first_match(patterns, text, group=1):
+def first_match(patterns, text):
+    """Utility to return the first regex match from a list of candidates."""
     for p in patterns:
-        m = re.search(p, text, re.IGNORECASE)
+        m = re.search(p, text, re.I)
         if m:
             try:
                 return m.group(group).strip()
