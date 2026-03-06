@@ -1,23 +1,28 @@
 {
     "account_id": "1",
-    "company_name": "Bob's Plumbing",
-    "business_hours": "They should probably just go straight to my cell phone, I guess.",
-    "office_address": "Unknown",
+    "company_name": "Bob from Bob's Plumbing",
+    "business_hours": "8 AM to 5 PM Eastern Time Eastern",
+    "timezone": "Eastern",
+    "office_address": "8 AM to 5 PM Eastern Time.",
+    "phone_numbers_mentioned": [],
     "services_supported": [
-        "Just general plumbing maintenance."
+        "Plumbing",
+        "plumbing maintenance",
+        "maintenance"
     ],
     "emergency_definition": [
-        "Yes, burst pipes are our main emergency.",
         "Yes, burst pipes are our main emergency."
     ],
-    "emergency_routing_rules": "They should probably just go straight to my cell phone, I guess.",
-    "non_emergency_routing_rules": "Take a message",
-    "call_transfer_rules": "If transfer fails, tell them we will text them immediately and hang up.",
+    "emergency_routing_rules": "555-0199 (Dispatch)",
+    "non_emergency_routing_rules": "Take a message and confirm follow-up during business hours",
+    "call_transfer_rules": "Fallback: text them immediately and hang up",
     "integration_constraints": [
-        "Don't schedule jobs for weekends."
+        "Don't schedule jobs for weekends"
     ],
-    "after_hours_flow_summary": "Route emergencies, take message for others",
-    "office_hours_flow_summary": "Handle calls according to routing rules",
+    "after_hours_flow_summary": "Greet caller > Confirm purpose > If emergency: collect name/number/address > Attempt transfer > Fallback if fails > If non-emergency: take message > Close",
+    "office_hours_flow_summary": "Greet > Ask purpose > Collect name/number > Transfer/Route > Fallback if fails > Confirm next steps > Anything else? > Close",
     "questions_or_unknowns": [],
-    "notes": "Updated from Onboarding call"
+    "data_source": "onboarding_call",
+    "extracted_at": "2026-03-06T13:46:50.780090",
+    "notes": "v2 \u2013 Confirmed onboarding. 3 field(s) updated. 0 unknown(s) remain."
 }

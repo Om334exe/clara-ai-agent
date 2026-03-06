@@ -1,21 +1,28 @@
 {
     "account_id": "1",
-    "company_name": "Bob's Plumbing",
-    "business_hours": "They should probably just go straight to my cell phone, I guess.",
-    "office_address": "Unknown",
+    "company_name": "Bob from Bob's Plumbing",
+    "business_hours": "8 AM to 5 PM Eastern Time Eastern",
+    "timezone": "Eastern",
+    "office_address": "8 AM to 5 PM Eastern Time.",
+    "phone_numbers_mentioned": [],
     "services_supported": [
-        "Just general plumbing maintenance."
+        "Plumbing",
+        "plumbing maintenance",
+        "maintenance"
     ],
     "emergency_definition": [
-        "Yes, burst pipes are our main emergency.",
         "Yes, burst pipes are our main emergency."
     ],
-    "emergency_routing_rules": "They should probably just go straight to my cell phone, I guess.",
-    "non_emergency_routing_rules": "Take a message",
-    "call_transfer_rules": "Default 30s timeout",
+    "emergency_routing_rules": "UNKNOWN \u2013 to be confirmed at onboarding",
+    "non_emergency_routing_rules": "Take a message and confirm follow-up during business hours",
+    "call_transfer_rules": "Default: 30 second timeout \u2013 to be confirmed at onboarding",
     "integration_constraints": [],
-    "after_hours_flow_summary": "Route emergencies, take message for others",
-    "office_hours_flow_summary": "Handle calls according to routing rules",
-    "questions_or_unknowns": [],
-    "notes": "Generated from Demo call"
+    "after_hours_flow_summary": "Greet caller > Confirm purpose > If emergency: collect name/number/address > Attempt transfer > Fallback if fails > If non-emergency: take message > Close",
+    "office_hours_flow_summary": "Greet > Ask purpose > Collect name/number > Transfer/Route > Fallback if fails > Confirm next steps > Anything else? > Close",
+    "questions_or_unknowns": [
+        "emergency_routing_rules: No routing number provided \u2013 confirm during onboarding"
+    ],
+    "data_source": "demo_call",
+    "extracted_at": "2026-03-06T13:46:50.777782",
+    "notes": "v1 \u2013 Preliminary. Generated from demo call transcript. 1 unknown(s) flagged."
 }

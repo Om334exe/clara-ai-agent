@@ -1,7 +1,30 @@
-# Changelog for Account 1
+# Changelog – Account 1
 
-Generated on: 2026-03-06T11:41:12.109333
+**Generated:** 2026-03-06 13:46
 
-- **Call Transfer Rules / Fallback**: Updated to 'If transfer fails, tell them we will text them immediately and hang up.'
-- **Call Transfer Rules / Fallback**: Updated to 'If transfer fails, tell them we will text them immediately and hang up.'
-- **Integration Constraints**: Added 'Don't schedule jobs for weekends.'
+**Changes Applied:** 3
+**Unknowns Resolved:** 1
+**Unknowns Remaining:** 0
+
+---
+
+## Field Changes
+
+### `emergency_routing_rules`
+- **Before (v1):** `UNKNOWN – to be confirmed at onboarding`
+- **After (v2):** `555-0199 (Dispatch)`
+- **Reason:** Updated from onboarding call
+
+### `call_transfer_rules`
+- **Before (v1):** `Default: 30 second timeout – to be confirmed at onboarding`
+- **After (v2):** `Fallback: text them immediately and hang up`
+- **Reason:** Updated from onboarding call
+
+### `integration_constraints`
+- **Before (v1):** `[]`
+- **After (v2):** `["Don't schedule jobs for weekends"]`
+- **Reason:** Updated from onboarding call
+
+## Resolved Unknowns
+- ✅ emergency_routing_rules: No routing number provided – confirm during onboarding
+
